@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правовой марафон: будь в теме!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+        }
+        .options button:hover {
+            background-color: #ddd;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Правовой марафон: будь в теме!</h2>
+        <div id="quiz">
+            <p class="question">Какой документ является основным законом Республики Беларусь?</p>
+            <div class="options">
+                <button onclick="checkAnswer(this, 'wrong')">Гражданский кодекс</button>
+                <button onclick="checkAnswer(this, 'correct')">Конституция</button>
+                <button onclick="checkAnswer(this, 'wrong')">Уголовный кодекс</button>
+            </div>
+        </div>
+        <p id="result"></p>
+    </div>
+    <script>
+        function checkAnswer(button, status) {
+            if (status === 'correct') {
+                button.style.backgroundColor = 'lightgreen';
+                document.getElementById('result').innerText = 'Верно!';
+            } else {
+                button.style.backgroundColor = 'lightcoral';
+                document.getElementById('result').innerText = 'Неверно. Попробуйте снова!';
+            }
+        }
+    </script>
+</body>
+</html>
