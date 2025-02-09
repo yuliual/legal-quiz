@@ -1,0 +1,81 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+const questions = [
+  {
+    question: "Какой основной закон Республики Беларусь?",
+    options: ["Гражданский кодекс", "Конституция", "Уголовный кодекс", "Избирательный кодекс"],
+    answer: "Конституция",
+    explanation: "Конституция является основным законом, определяющим основы государственного устройства и права граждан."
+  },
+  {
+    question: "С какого возраста гражданин Беларуси может голосовать на выборах?",
+    options: ["16 лет", "18 лет", "21 год", "17 лет"],
+    answer: "18 лет",
+    explanation: "Согласно законодательству, право голоса предоставляется гражданам с 18 лет."
+  },
+  {
+    question: "Какой орган власти принимает законы в Республике Беларусь?",
+    options: ["Президент", "Совет Министров", "Парламент", "Конституционный суд"],
+    answer: "Парламент",
+    explanation: "Парламент (Национальное собрание) является законодательным органом страны, который принимает законы."
+  }
+];
+
+export default function QuizApp() {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+  const [feedback, setFeedback] = useState(null);
+
+  const handleAnswer = (option) => {
+    if (option === questions[currentQuestion].answer) {
+      setScore(score + 1);
+      setFeedback({ correct: true, message: "Правильно! " + questions[currentQuestion].explanation });
+    } else {
+      setFeedback({ correct: false, message: "Неправильно. " + questions[currentQuestion].explanation });
+    }
+  };
+
+  const handleNext = () => {
+    const nextQuestion = currentQuestion + 1;
+    if (nextQuestion < questions.length) {
+      setCurrentQuestion(nextQuestion);
+      setFeedback(null);
+    } else {
+      setShowResult(true);
+    }
+  };
+
+  return (
+    <div className="p-6 max-w-xl mx-auto text-center">
+      {showResult ? (
+        <Card>
+          <CardContent className="p-6 text-xl">
+            Викторина завершена! Ваш результат: {score} из {questions.length}
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent className="p-6">
+            <h2 className="text-xl font-bold mb-4">{questions[currentQuestion].question}</h2>
+            {questions[currentQuestion].options.map((option, index) => (
+              <Button key={index} className="block w-full mb-2" onClick={() => handleAnswer(option)}>
+                {option}
+              </Button>
+            ))}
+            {feedback && (
+              <div className={`mt-4 p-4 rounded ${feedback.correct ? 'bg-green-200' : 'bg-red-200'}`}>
+                {feedback.message}
+              </div>
+            )}
+            {feedback && (
+              <Button className="mt-4" onClick={handleNext}>Следующий вопрос</Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
