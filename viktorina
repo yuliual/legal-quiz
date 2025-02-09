@@ -1,82 +1,142 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-
-const questions = [
-  {
-    question: "Какой основной закон Республики Беларусь?",
-    options: ["Гражданский кодекс", "Конституция", "Уголовный кодекс", "Избирательный кодекс"],
-    answer: "Конституция",
-    explanation: "Конституция является основным законом, определяющим основы государственного устройства и права граждан."
-  },
-  {
-    question: "С какого возраста гражданин Беларуси может голосовать на выборах?",
-    options: ["16 лет", "18 лет", "21 год", "17 лет"],
-    answer: "18 лет",
-    explanation: "Согласно законодательству, право голоса предоставляется гражданам с 18 лет."
-  },
-  {
-    question: "Какой орган власти принимает законы в Республике Беларусь?",
-    options: ["Президент", "Совет Министров", "Парламент", "Конституционный суд"],
-    answer: "Парламент",
-    explanation: "Парламент (Национальное собрание) является законодательным органом страны, который принимает законы."
-  }
-];
-
-export default function QuizApp() {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [score, setScore] = useState(0);
-  const [showResult, setShowResult] = useState(false);
-  const [feedback, setFeedback] = useState(null);
-
-  const handleAnswer = (option) => {
-    if (option === questions[currentQuestion].answer) {
-      setScore(score + 1);
-      setFeedback({ correct: true, message: "Правильно! " + questions[currentQuestion].explanation });
-    } else {
-      setFeedback({ correct: false, message: "Неправильно. " + questions[currentQuestion].explanation });
-    }
-  };
-
-  const handleNext = () => {
-    const nextQuestion = currentQuestion + 1;
-    if (nextQuestion < questions.length) {
-      setCurrentQuestion(nextQuestion);
-      setFeedback(null);
-    } else {
-      setShowResult(true);
-    }
-  };
-
-  return (
-    <div className="p-6 max-w-xl mx-auto text-center">
-      {showResult ? (
-        <Card>
-          <CardContent className="p-6 text-xl">
-            Викторина завершена! Ваш результат: {score} из {questions.length}
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-xl font-bold mb-4">{questions[currentQuestion].question}</h2>
-            {questions[currentQuestion].options.map((option, index) => (
-              <Button key={index} className="block w-full mb-2" onClick={() => handleAnswer(option)}>
-                {option}
-              </Button>
-            ))}
-            {feedback && (
-              <div className={`mt-4 p-4 rounded ${feedback.correct ? 'bg-green-200' : 'bg-red-200'}`}>
-                {feedback.message}
-              </div>
-            )}
-            {feedback && (
-              <Button className="mt-4" onClick={handleNext}>Следующий вопрос</Button>
-            )}
-          </CardContent>
-        </Card>
-      )}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правовой марафон: будь в теме!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+        }
+        .options button:hover {
+            background-color: #ddd;
+        }
+        #result, #score {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .explanation {
+            display: none;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #555;
+        }
+        .separator {
+            margin: 40px 0;
+            border-top: 2px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Правовой марафон: будь в теме!</h2>
+        <div id="quiz"></div>
+        <p id="result"></p>
+        <p id="score">Ваш счет: 0</p>
     </div>
-  );
-}
+    <script>
+        let score = 0;
+        
+        const questions = [
+            {
+                question: "Какие основные права граждан закреплены в Конституции?",
+                options: [
+                    "Право на свободу от образования",
+                    "Право на безработицу",
+                    "Основные права граждан включают право на жизнь, свободу, личную неприкосновенность, свободу слова, право на образование, право на труд и социальное обеспечение.",
+                    "Право на безусловное богатство"
+                ],
+                correct: 2,
+                explanation: "Основные права граждан охватывают ключевые аспекты свободы и социальной защиты."
+            },
+            {
+                question: "Какова структура государственной власти в Беларуси?",
+                options: [
+                    "В Беларуси нет разделения властей.",
+                    "Государственная власть в Беларуси состоит из исполнительной, законодательной и судебной ветвей.",
+                    "Государственная власть в Беларуси состоит только из исполнительной ветви.",
+                    "Государственная власть в Беларуси включает только законодательную и судебные ветви."
+                ],
+                correct: 1,
+                explanation: "Государственная власть в Беларуси действительно состоит из трех ветвей."
+            }
+        ];
+        
+        let quizContainer = document.getElementById("quiz");
+
+        questions.forEach((q, index) => {
+            let questionElem = document.createElement("div");
+            questionElem.classList.add("question");
+            questionElem.innerHTML = `<p>${q.question}</p>`;
+
+            let optionsContainer = document.createElement("div");
+            optionsContainer.classList.add("options");
+
+            q.options.forEach((option, i) => {
+                let button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => checkAnswer(button, i === q.correct, index);
+                optionsContainer.appendChild(button);
+            });
+
+            let explanationElem = document.createElement("p");
+            explanationElem.classList.add("explanation");
+            explanationElem.innerText = q.explanation;
+
+            let showExplanationBtn = document.createElement("button");
+            showExplanationBtn.innerText = "Посмотреть объяснение ответа";
+            showExplanationBtn.onclick = () => {
+                explanationElem.style.display = "block";
+            };
+
+            quizContainer.appendChild(questionElem);
+            quizContainer.appendChild(optionsContainer);
+            quizContainer.appendChild(showExplanationBtn);
+            quizContainer.appendChild(explanationElem);
+            
+            let separator = document.createElement("div");
+            separator.classList.add("separator");
+            quizContainer.appendChild(separator);
+        });
+
+        function checkAnswer(button, isCorrect, index) {
+            if (isCorrect) {
+                button.style.backgroundColor = 'lightgreen';
+                document.getElementById('result').innerText = 'Верно!';
+                score++;
+            } else {
+                button.style.backgroundColor = 'lightcoral';
+                document.getElementById('result').innerText = 'Неверно. Попробуйте снова!';
+            }
+            document.getElementById('score').innerText = `Ваш счет: ${score}`;
+        }
+    </script>
+</body>
+</html>
+
 
