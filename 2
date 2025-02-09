@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правовой марафон: будь в теме!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+        }
+        .options button:hover {
+            background-color: #ddd;
+        }
+        #result, #score {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .explanation {
+            display: none;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #555;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+        }
+        .nav-buttons button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Правовой марафон: будь в теме!</h2>
+        <div id="quiz"></div>
+        <p id="result"></p>
+        <p id="score">Ваш счет: 0</p>
+        <div class="nav-buttons">
+            <button id="prev" onclick="prevQuestion()" disabled>Назад</button>
+            <button id="next" onclick="nextQuestion()">Далее</button>
+        </div>
+    </div>
+    <script>
+        let score = 0;
+        let currentQuestion = 0;
+        
+        const questions = [
+            {
+                question: "Какие основные права граждан закреплены в Конституции?",
+                options: [
+                    "Право на свободу от образования",
+                    "Право на безработицу",
+                    "Основные права граждан включают право на жизнь, свободу, личную неприкосновенность, свободу слова, право на образование, право на труд и социальное обеспечение.",
+                    "Право на безусловное богатство"
+                ],
+                correct: 2,
+                explanation: "Основные права граждан охватывают ключевые аспекты свободы и социальной защиты."
+            },
+            {
+                question: "Какова структура государственной власти в Беларуси?",
+                options: [
+                    "В Беларуси нет разделения властей.",
+                    "Государственная власть в Беларуси состоит из исполнительной, законодательной и судебной ветвей.",
+                    "Государственная власть в Беларуси состоит только из исполнительной ветви.",
+                    "Государственная власть в Беларуси включает только законодательную и судебные ветви."
+                ],
+                correct: 1,
+                explanation: "Государственная власть в Беларуси действительно состоит из трех ветвей."
+            }
+        ];
+        
+        function loadQuestion() {
+            let quizContainer = document.getElementById("quiz");
+            quizContainer.innerHTML = "";
+            
+            let q = questions[currentQuestion];
+            
+            let questionElem = document.createElement("div");
+            questionElem.classList.add("question");
+            questionElem.innerHTML = `<p>${q.question}</p>`;
+            
+            let optionsContainer = document.createElement("div");
+            optionsContainer.classList.add("options");
+            
+            q.options.forEach((option, i) => {
+                let button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => checkAnswer(button, i === q.correct);
+                optionsContainer.appendChild(button);
+            });
+            
+            let explanationElem = document.createElement("p");
+            explanationElem.classList.add("explanation");
+            explanationElem.innerText = q.explanation;
+            
+            let showExplanationBtn = document.createElement("button");
+            showExplanationBtn.innerText = "Посмотреть объяснение ответа";
+            showExplanationBtn.onclick = () => {
+                explanationElem.style.display = "block";
+            };
+            
+            quizContainer.appendChild(questionElem);
+            quizContainer.appendChild(optionsContainer);
+            quizContainer.appendChild(showExplanationBtn);
+            quizContainer.appendChild(explanationElem);
+            
+            document.getElementById("prev").disabled = currentQuestion === 0;
+            document.getElementById("next").disabled = currentQuestion === questions.length - 1;
+        }
+        
+        function checkAnswer(button, isCorrect) {
+            if (isCorrect) {
+                button.style.backgroundColor = 'lightgreen';
+                document.getElementById('result').innerText = 'Верно!';
+                score++;
+            } else {
+                button.style.backgroundColor = 'lightcoral';
+                document.getElementById('result').innerText = 'Неверно. Попробуйте снова!';
+            }
+            document.getElementById('score').innerText = `Ваш счет: ${score}`;
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+        
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+        
+        loadQuestion();
+    </script>
+</body>
+</html>
